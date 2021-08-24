@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/shopmy-app/static/css/main.7613d244.chunk.css",
+    "main.js": "/shopmy-app/static/js/main.444cb9c7.chunk.js",
+    "main.js.map": "/shopmy-app/static/js/main.444cb9c7.chunk.js.map",
+    "runtime-main.js": "/shopmy-app/static/js/runtime-main.c8555450.js",
+    "runtime-main.js.map": "/shopmy-app/static/js/runtime-main.c8555450.js.map",
+    "static/css/2.91890665.chunk.css": "/shopmy-app/static/css/2.91890665.chunk.css",
+    "static/js/2.232e9729.chunk.js": "/shopmy-app/static/js/2.232e9729.chunk.js",
+    "static/js/2.232e9729.chunk.js.map": "/shopmy-app/static/js/2.232e9729.chunk.js.map",
+    "index.html": "/shopmy-app/index.html",
+    "static/css/2.91890665.chunk.css.map": "/shopmy-app/static/css/2.91890665.chunk.css.map",
+    "static/css/main.7613d244.chunk.css.map": "/shopmy-app/static/css/main.7613d244.chunk.css.map",
+    "static/js/2.232e9729.chunk.js.LICENSE.txt": "/shopmy-app/static/js/2.232e9729.chunk.js.LICENSE.txt",
+    "static/media/beauty.a155b2ab.jpg": "/shopmy-app/static/media/beauty.a155b2ab.jpg",
+    "static/media/deals.1c62f247.jpg": "/shopmy-app/static/media/deals.1c62f247.jpg",
+    "static/media/elecdeals.8dbb7efa.jpg": "/shopmy-app/static/media/elecdeals.8dbb7efa.jpg",
+    "static/media/electrony.67904445.jpg": "/shopmy-app/static/media/electrony.67904445.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c8555450.js",
+    "static/css/2.91890665.chunk.css",
+    "static/js/2.232e9729.chunk.js",
+    "static/css/main.7613d244.chunk.css",
+    "static/js/main.444cb9c7.chunk.js"
+  ]
+}
