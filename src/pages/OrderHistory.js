@@ -74,7 +74,10 @@ const OrderHistory = () => {
                   {orderItems.map((item) => (
                     <OrderItem key={item._id}>
                       <ItemLeft>
-                        <img src={item.image} alt='' />
+                        <img
+                          src={process.env.PUBLIC_URL + `/images/${item.image}`}
+                          alt=''
+                        />
                         <h2>{item.name}</h2>
                       </ItemLeft>
                       <ItemRight>

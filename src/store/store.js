@@ -21,7 +21,11 @@ import {
   orderMineListReducer,
   orderPayReducer,
 } from '../reducers/orderReducer'
-import { productCommentReducer } from '../reducers/commentReducer'
+import {
+  checkCommentedReducer,
+  checkPurchasedReducer,
+  productCommentReducer,
+} from '../reducers/commentReducer'
 
 const initialState = {
   userSignIn: {
@@ -56,6 +60,7 @@ const reducer = combineReducers({
   userDetails: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
   productComment: productCommentReducer,
+  checkCommented: checkCommentedReducer,
 })
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

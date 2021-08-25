@@ -7,6 +7,8 @@ import { detailProducts } from '../actions/productAction'
 import {
   getProductComment,
   createProductComment,
+  checkIsPurchase,
+  checkIsComment,
 } from '../actions/commentAction'
 
 import { Rating, Loader } from '../components/index'
@@ -14,8 +16,6 @@ import { Rating, Loader } from '../components/index'
 const SingleProduct = () => {
   const [qty, setQty] = useState(1)
   const [isError, setIsError] = useState('')
-  const [isPurchase, setIsPruchase] = useState(false)
-  const [isComment, setIsComment] = useState(null)
   const [commentBody, setCommentBody] = useState('')
   const { id } = useParams()
   const history = useHistory()
@@ -29,67 +29,28 @@ const SingleProduct = () => {
   const productComment = useSelector((state) => state.productComment)
   const { comments } = productComment
 
+  const checkCommented = useSelector((state) => state.checkCommented)
+  const { isPurchased } = checkCommented
+
   useEffect(() => {
-    dispatch(detailProducts(id))
-    dispatch(getProductComment(id))
-
-    if (orders) {
-      const newOrderArray = orders.map((order) => {
-        if (order.isDelived) {
-          return order.orderItems
-        }
-
-        return []
-      })
-
-      if (newOrderArray) {
-        const orderProductId = newOrderArray.map((productId) => {
-          return productId.map((id) => {
-            return id.product
-          })
-        })
-
-        // Merge Array in Array into one Array
-        const sliceArray = [].concat.apply([], orderProductId)
-
-        checkProductPurchase(sliceArray)
-      }
+    const firstFunction = () => {
+      dispatch(detailProducts(id))
+      dispatch(getProductComment(id))
     }
 
-    if (comments) {
-      checkUserComment()
+    const secondFunction = async () => {
+      await firstFunction()
+
+      dispatch(checkIsPurchase(id))
     }
+    secondFunction()
+
+    console.log(CheckIsComment())
   }, [dispatch, id])
 
-  const handleAddTocart = () => {
-    history.push(`/cart/${id}?qty=${qty}`)
-  }
-
-  const checkProductPurchase = (sliceArray) => {
-    //console.log(sliceArray)
-
-    const check = sliceArray.map((x) => {
-      if (x.includes(id)) {
-        return true
-      } else {
-        return false
-      }
-    })
-
-    //console.log(check)
-
-    if (check.includes(true)) {
-      setIsPruchase(true)
-    } else {
-      setIsPruchase(false)
-    }
-  }
-
-  const checkUserComment = () => {
-    if (comments.length === 0) {
-      setIsComment(false)
-    } else if (comments) {
-      const check = comments.map((comment) => {
+  const CheckIsComment = () => {
+    if (comments) {
+      const tempC = comments.map((comment) => {
         if (comment.user.includes(userInfo._id)) {
           return true
         } else {
@@ -97,12 +58,17 @@ const SingleProduct = () => {
         }
       })
 
-      if (check.includes(true)) {
-        setIsComment(true)
+      if (tempC.includes(true) && isPurchased) {
+        return true
       } else {
-        setIsComment(false)
+        return false
       }
     }
+    return
+  }
+
+  const handleAddTocart = () => {
+    history.push(`/cart/${id}?qty=${qty}`)
   }
 
   const handleSubmitComment = (e) => {
@@ -119,7 +85,6 @@ const SingleProduct = () => {
         numReviews: numReviews + 1,
       }
       dispatch(createProductComment(data))
-      setIsComment(true)
     } else {
       setIsError('Review is Empty. Too existed to review and forgot to type?')
     }
@@ -212,23 +177,24 @@ const SingleProduct = () => {
           )}
         </>
       )}
-      {isPurchase && !isComment && (
-        <CommentInputContainer>
-          {isError && (
-            <div className='w-full py-1 px-4 text-red-400 bg-red-200'>
-              {isError}
-            </div>
-          )}
-          <CommentInput
-            rows='4'
-            cols='50'
-            placeholder='Comment your reviews here'
-            value={commentBody}
-            onChange={(e) => setCommentBody(e.target.value)}
-          />
-          <button onClick={(e) => handleSubmitComment(e)}>Post Review</button>
-        </CommentInputContainer>
-      )}
+      {isPurchased &&
+        !CheckIsComment() &&(
+          <CommentInputContainer>
+            {isError && (
+              <div className='w-full py-1 px-4 text-red-400 bg-red-200'>
+                {isError}
+              </div>
+            )}
+            <CommentInput
+              rows='4'
+              cols='50'
+              placeholder='Comment your reviews here'
+              value={commentBody}
+              onChange={(e) => setCommentBody(e.target.value)}
+            />
+            <button onClick={(e) => handleSubmitComment(e)}>Post Review</button>
+          </CommentInputContainer>
+        )}
       {comments && comments.length > 0 && (
         <CommentContainer>
           <h1>Customer Reviews</h1>

@@ -1,5 +1,10 @@
 import Axios from 'axios'
+import { useDispatch } from 'react-redux'
 import {
+  CHECK_COMMENT_FALSE,
+  CHECK_COMMENT_TRUE,
+  CHECK_PURCHASE_FALSE,
+  CHECK_PURCHASE_TRUE,
   COMMENT_ALL_FAIL,
   COMMENT_ALL_REQUEST,
   COMMENT_ALL_SUCCESS,
@@ -29,7 +34,6 @@ export const getProductComment = (productId) => async (dispatch) => {
 
 export const createProductComment =
   (InfoData) => async (dispatch, getState) => {
-    console.log(InfoData)
     const {
       userSignIn: { userInfo },
     } = getState()
@@ -45,13 +49,13 @@ export const createProductComment =
       )
 
       if (data) {
-      const { updatedProduct } = await Axios.put(
-        `${baseUrl}api/products/addcomment/${id}`,
-        { numReviews },
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      )
+        const { updatedProduct } = await Axios.put(
+          `${baseUrl}api/products/addcomment/${id}`,
+          { numReviews },
+          {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          }
+        )
 
         dispatch({ type: PRODUCT_UPDATED_INFO, payload: updatedProduct })
       }
@@ -65,3 +69,51 @@ export const createProductComment =
       dispatch({ type: COMMENT_CREATE_FAIL, payload: `${message}` })
     }
   }
+
+export const checkIsPurchase = (productId) => (dispatch, getState) => {
+  const {
+    userSignIn: { userInfo },
+    orderMineList: { orders },
+    productComment: { comments },
+  } =  getState()
+
+
+  if (orders) {
+    const newOrderArray = orders.map((order) => {
+      if (order.isDelived) {
+        return order.orderItems
+      }
+
+      return []
+    })
+
+    if (newOrderArray && newOrderArray.length > 0) {
+      const orderProductId = newOrderArray.map((productId) => {
+        return productId.map((id) => {
+          return id.product
+        })
+      })
+
+      // Merge Array in Array into one Array
+      const sliceArray = [].concat.apply([], orderProductId)
+
+      if (sliceArray && sliceArray.length > 0) {
+        const check = sliceArray.map((x) => {
+          if (x.includes(productId)) {
+            return true
+          } else {
+            return false
+          }
+        })
+
+        if (check.includes(true)) {
+          dispatch({ type: CHECK_PURCHASE_TRUE, payload: true })
+        } else {
+          dispatch({ type: CHECK_PURCHASE_FALSE, payload: false })
+        }
+      }
+    }
+  }
+}
+
+
