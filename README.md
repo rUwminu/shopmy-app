@@ -7,5 +7,5 @@ ray@email.com <br/>
 Password : 
 123456
 <br/>
-Feel free to create new account by tour own!<br/>
+Feel free to create new account by your own!<br/>
 Please don't spam the backend, I massively appeciated
